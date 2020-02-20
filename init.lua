@@ -15,7 +15,8 @@ local _debug = false
 local Breadboard = class()
 
 local env = {
-  frame = function () end
+  frame = function () end,
+  class = class,
 }
 
 function Breadboard:init()
