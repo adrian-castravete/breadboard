@@ -62,15 +62,17 @@ function Cart:tileDraw(tilesetID, tileID, destCellX, destCellY, spanCellX, spanC
   lg.setBlendMode('alpha')
 end
 
-function Cart:tileClear(destCellX, destCellY, spanCellX, spanCellY, offsetX, offsetY)
+function Cart:tileClear(destCellX, destCellY, spanCellX, spanCellY, offsetX, offsetY, alpha, colour)
   local ox = offsetX or 0
   local oy = offsetY or 0
   local sx = spanCellX or 1
   local sy = spanCellY or 1
+  local alpha = alpha or 0
+  local col = colour or {0, 0, 0}
 
   lg.setCanvas(self._backCanvas)
   lg.setBlendMode('replace')
-  lg.setColor(0, 0, 0, 0)
+  lg.setColor(col[1], col[2], col[3], alpha)
   lg.rectangle('fill', destCellX * 8 + ox, destCellY * 8 + oy, sx * 8, sy * 8)
   lg.setCanvas()
   lg.setBlendMode('alpha')
