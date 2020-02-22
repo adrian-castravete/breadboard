@@ -7,6 +7,7 @@ local loveChain = utils.loveChain
 local _debugMouseTouch = false
 local _debugTouchPoints = false or _debugMouseTouch
 local _debugTouchRegions = false
+local _debugTouchForceShow = false
 local keys = {
   left = 'l',
   up = 'u',
@@ -238,7 +239,7 @@ end
 function Input:draw()
   if self.disableTouch then return end
 
-  if not self.usingTouch then
+  if not self.usingTouch and not _debugTouchForceShow then
     return
   end
   local wids = self.widgets
