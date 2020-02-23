@@ -16,19 +16,22 @@ function Cart:init(runtime)
   }
 end
 
-function Cart:tileDraw(tilesetID, tileID, destCellX, destCellY, spanCellX, spanCellY, alpha, colour, offsetX, offsetY, flipX, flipY)
+function Cart:tileDraw(tilesetID, sourceCellX, sourceCellY, destCellX, destCellY, spanCellX, spanCellY, alpha, colour, offsetX, offsetY, flipX, flipY)
   local ts = self:findTileset(tilesetID)
   if not ts then
     error("Need a tileset ID!", 2)
   end
 
-  if not destCellX or not destCellY then
-    error("Invalid destination coordinates (" .. destCellX .. ", " .. destCellY .. ")", 2)
+  if not sourceCellX or not sourceCellY then
+    error("Invalid source coordinates ("..sourceCellX..", "..sourceCellY..")", 2)
   end
 
-  local dx, dy = tileID % ts.lineCells, math.floor(tileID / ts.lineCells)
-  dx = dx * 8
-  dy = dy * 8
+  if not destCellX or not destCellY then
+    error("Invalid destination coordinates ("..destCellX..", "..destCellY..")", 2)
+  end
+
+  local dx = sourceCellX * 8
+  local dy = sourceCellY * 8
 
   local isx = spanCellX or 1
   local isy = spanCellY or 1
