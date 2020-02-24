@@ -267,6 +267,8 @@ function env.viewport()
   return {
     offsetX = main.offsetX,
     offsetY = main.offsetY,
+    width = main.width,
+    height = main.height,
     zoom = main.zoom,
   }
 end

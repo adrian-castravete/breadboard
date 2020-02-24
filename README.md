@@ -20,6 +20,30 @@ The following code should display an 8x8 tile from the `some-image.png` image on
 API
 ---
 
+### screenSize
+
+Set the viewport size. The default is 240 and will be integer scaled to the height of the actual screen.
+
+#### Parameters
+
+* size - the size in _pixels_; I like 240 (default), 120 and 420.
+
+### viewport
+
+Obtain information about the viewport position and window size.  
+This function is useful to get info about the whereabouts in the real coordinate space of the device that *Löve2D* is being run on.  
+The viewport is always square, but I allow for drawing outside it, such as that if you have a larger platformer for example, the buttons may hide some of the playfield but hopefully not the viewport.
+
+#### Return value
+
+A dict containing these keys:
+
+* offsetX - start position of the top left corner of the screen (may be negative) (coordinate x)
+* offsetY - start position of the top left corner of the screen (may be negative) (coordinate y)
+* width - the full width of the window
+* height - the full height of the window
+* zoom - the scale factor
+
 ### clearScreen
 
 Clear the screen with a given colour. (black default)
