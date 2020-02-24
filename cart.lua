@@ -204,13 +204,20 @@ function Cart:drawMap(sourceCellX, sourceCellY, spanCellX, spanCellY, offsetX, o
 end
 
 function Cart:print(x, y, text, c)
+  if not x or type(x) ~= 'number' or
+     not y or type(y) ~= 'number' then
+    error("Invalid printXY coords ("..tostring(x)..", "..tostring(y)..")", 2)
+  end
+
+  if not text then
+    error("Need something to print for printXY", 2)
+  end
+
   local col = c or {1, 1, 1}
-  local ix = x or 0
-  local iy = y or 0
 
   lg.setCanvas(self._runtime.bgCvs)
   lg.setColor(col[1], col[2], col[3])
-  lg.print(text, ix, iy)
+  lg.print(text, x, y)
   lg.setCanvas()
 end
 
