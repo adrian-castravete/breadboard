@@ -52,7 +52,8 @@ Draw to the tilemap.
 #### Parameters
 
 * tilesetID - ID of the loaded tileset (use makeTileset)
-* tileID - ID of the first tile from the tileset to start copying from
+* sourceCellX - source cell to copy from (x coordinate)
+* sourceCellY - source cell to copy from (y coordinate)
 * destCellX - destination cell to copy to on the tilemap (x coordinate)
 * destCellY - destination cell to copy to on the tilemap (y coordinate)
 * spanCellX (default: `1`) - number of tiles to copy (x coordinate)
