@@ -99,10 +99,10 @@ Clear a tile on the tilemap.
 * destCellY - position of the first tile to clear (y coordinate)
 * spanCellX (default: `1`) - number of tiles to clear (x coordinate)
 * spanCellY (default: `1`) - number of tiles to clear (y coordinate)
-* offsetX (default: `0`) - displacement (x coordinate)
-* offsetY (default: `0`) - displacement (y coordinate)
 * alpha (default: `0` full transparency) - the amount of transparency to set
 * colour (default: `{0, 0, 0}` full black) - the colour to set
+* offsetX (default: `0`) - displacement (x coordinate)
+* offsetY (default: `0`) - displacement (y coordinate)
 
 ### makeTileset
 

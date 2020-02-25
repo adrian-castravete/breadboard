@@ -65,7 +65,7 @@ function Cart:tileDraw(tilesetID, sourceCellX, sourceCellY, destCellX, destCellY
   lg.setBlendMode('alpha')
 end
 
-function Cart:tileClear(destCellX, destCellY, spanCellX, spanCellY, offsetX, offsetY, alpha, colour)
+function Cart:tileClear(destCellX, destCellY, spanCellX, spanCellY, alpha, colour, offsetX, offsetY)
   local ox = offsetX or 0
   local oy = offsetY or 0
   local sx = spanCellX or 1
