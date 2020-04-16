@@ -1,0 +1,13 @@
+chain = (loveFunc, func, after)->
+  (...)->
+    if loveFunc and after
+      loveFunc ...
+    func ...
+    if loveFunc and not after
+      loveFunc ...
+
+export loveChain = (instance, funcNames)->
+  for i=1, #funcNames
+    key = funcNames[i]
+    love[key] = chain love[key], (...)->
+      instance[key] instance, ...

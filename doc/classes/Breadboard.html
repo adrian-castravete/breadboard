@@ -1,0 +1,717 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Methods">Methods</a></li>
+</ul>
+
+
+<h2>Classes</h2>
+<ul class="nowrap">
+  <li><strong>Breadboard</strong></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Class <code>Breadboard</code></h1>
+<p>Breadboard (fkge)</p>
+<p> Simple game engine over Löve2D for even faster prototyping</p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>License</strong>: MIT</li>
+        <li><strong>Author</strong>: Adrian Castravete</li>
+    </ul>
+
+
+<h2><a href="#Methods">Methods</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Breadboard\new">Breadboard\new (dontStart)</a></td>
+	<td class="summary">Constructor.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Breadboard\draw">Breadboard\draw (srcX, srcY, spX, spY, offX, offY, rotationAngle, scale, a, col)</a></td>
+	<td class="summary">Draw (part of) the map to screen.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Breadboard\tile">Breadboard\tile (tsetID, srcX, srcY, dstX, dstY, spX, spY, a, col, offX, offY, fX, fY)</a></td>
+	<td class="summary">Draw new tiles from a tileset into the map data.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Breadboard\tileClear">Breadboard\tileClear (dstX, dstY, spX, spY, a, col)</a></td>
+	<td class="summary">Clear one or more tiles from the tile map</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Breadboard\clearScreen">Breadboard\clearScreen (colours, red, green, blue, alpha)</a></td>
+	<td class="summary">Clear the screen.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Breadboard\makeTileset">Breadboard\makeTileset (fileName)</a></td>
+	<td class="summary">Make a tileset from a file.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Breadboard\listTilesets">Breadboard\listTilesets ()</a></td>
+	<td class="summary">List all loaded tileset IDs.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Breadboard\removeTileset">Breadboard\removeTileset (tilesetID)</a></td>
+	<td class="summary">Remove a tileset.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Breadboard\button">Breadboard\button (btn)</a></td>
+	<td class="summary">Retrieve a button's state.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Breadboard\buttonPressed">Breadboard\buttonPressed (btn)</a></td>
+	<td class="summary">Retrieve whether a button has just been pressed.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Breadboard\printXY">Breadboard\printXY (x, y, text, col)</a></td>
+	<td class="summary">Print text on screen
+ Print some text on screen using the default font.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Breadboard\tileDump">Breadboard\tileDump (fileName)</a></td>
+	<td class="summary">Write the tilemap to disk.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Breadboard\config">Breadboard\config (options)</a></td>
+	<td class="summary">Change configuration stuff.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Breadboard\viewport">Breadboard\viewport ()</a></td>
+	<td class="summary">Return some viewport information.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Breadboard\animate">Breadboard\animate (delay, fnProgress, fnDone)</a></td>
+	<td class="summary">Start an animation coroutine.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Breadboard\lerp">Breadboard\lerp (a, b, ratio)</a></td>
+	<td class="summary">Linear interpolation function.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Breadboard\screenSize">Breadboard\screenSize (v)</a></td>
+	<td class="summary">Set or Get the screen size.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Methods"></a>Methods</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Breadboard\new"></a>
+    <strong>Breadboard\new (dontStart)</strong>
+    </dt>
+    <dd>
+    Constructor.
+ Create the main Breadboard object, a simple engine on top of Löve2D
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">dontStart</span>
+            <span class="types"><span class="type">boolean</span></span>
+         whether to create the <em>cart</em> and start running
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Breadboard\draw"></a>
+    <strong>Breadboard\draw (srcX, srcY, spX, spY, offX, offY, rotationAngle, scale, a, col)</strong>
+    </dt>
+    <dd>
+    Draw (part of) the map to screen.
+ Given some source coordinates along with a width and height, draw as many
+ tiles to the screen to a specified coordinate.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">srcX</span>
+            <span class="types"><span class="type">number</span></span>
+         the start coordinate to draw the map from (X coordinate)
+        </li>
+        <li><span class="parameter">srcY</span>
+            <span class="types"><span class="type">number</span></span>
+         the start coordinate to draw the map from (Y coordinate)
+        </li>
+        <li><span class="parameter">spX</span>
+            <span class="types"><span class="type">number</span></span>
+         the amount of tiles to draw to the screen (X coordinate)
+        </li>
+        <li><span class="parameter">spY</span>
+            <span class="types"><span class="type">number</span></span>
+         the amount of tiles to draw to the screen (Y coordinate)
+        </li>
+        <li><span class="parameter">offX</span>
+            <span class="types"><span class="type">number</span></span>
+         the position on screen to draw to (X coordinate)
+        </li>
+        <li><span class="parameter">offY</span>
+            <span class="types"><span class="type">number</span></span>
+         the position on screen to draw to (Y coordinate)
+        </li>
+        <li><span class="parameter">rotationAngle</span>
+            <span class="types"><span class="type">number</span></span>
+         rotate the map while drawing it to the screen (default 0)
+        </li>
+        <li><span class="parameter">scale</span>
+            <span class="types"><span class="type">number</span></span>
+         the size of the map while drawing to the screen (default 1)
+        </li>
+        <li><span class="parameter">a</span>
+            <span class="types"><span class="type">number</span></span>
+         the opacity of the thing to draw (default 1)
+        </li>
+        <li><span class="parameter">col</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         the colour effect (default is white {1, 1, 1})
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Breadboard\tile"></a>
+    <strong>Breadboard\tile (tsetID, srcX, srcY, dstX, dstY, spX, spY, a, col, offX, offY, fX, fY)</strong>
+    </dt>
+    <dd>
+    Draw new tiles from a tileset into the map data.
+ Given a tileset copy one or more tiles to the map data.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tsetID</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         the Identification tag for the loaded tileset
+        </li>
+        <li><span class="parameter">srcX</span>
+            <span class="types"><span class="type">number</span></span>
+         the start coordinate to draw the from the tileset (X coordinate)
+        </li>
+        <li><span class="parameter">srcY</span>
+            <span class="types"><span class="type">number</span></span>
+         the start coordinate to draw the from the tileset (Y coordinate)
+        </li>
+        <li><span class="parameter">dstX</span>
+            <span class="types"><span class="type">number</span></span>
+         the start coordinate to draw on the map (X coordinate)
+        </li>
+        <li><span class="parameter">dstY</span>
+            <span class="types"><span class="type">number</span></span>
+         the start coordinate to draw on the map (Y coordinate)
+        </li>
+        <li><span class="parameter">spX</span>
+            <span class="types"><span class="type">number</span></span>
+         the amount of tiles to draw to the tile map (X coordinate) (default 1)
+        </li>
+        <li><span class="parameter">spY</span>
+            <span class="types"><span class="type">number</span></span>
+         the amount of tiles to draw to the tile map (Y coordinate) (default 1)
+        </li>
+        <li><span class="parameter">a</span>
+            <span class="types"><span class="type">number</span></span>
+         the opacity of the thing to draw (default 1)
+        </li>
+        <li><span class="parameter">col</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         the colour effect (default is white {1, 1, 1})
+        </li>
+        <li><span class="parameter">offX</span>
+            <span class="types"><span class="type">number</span></span>
+         finer control over where to draw on the map (X coordinate) (default 0)
+        </li>
+        <li><span class="parameter">offY</span>
+            <span class="types"><span class="type">number</span></span>
+         finer control over where to draw on the map (Y coordinate) (default 0)
+        </li>
+        <li><span class="parameter">fX</span>
+            <span class="types"><span class="type">boolean</span></span>
+         whether to flip horizontally (default false)
+        </li>
+        <li><span class="parameter">fY</span>
+            <span class="types"><span class="type">boolean</span></span>
+         whether to flip vertically (default false)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Breadboard\tileClear"></a>
+    <strong>Breadboard\tileClear (dstX, dstY, spX, spY, a, col)</strong>
+    </dt>
+    <dd>
+    Clear one or more tiles from the tile map
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">dstX</span>
+            <span class="types"><span class="type">number</span></span>
+         the start coordinate to clear on the map (X coordinate)
+        </li>
+        <li><span class="parameter">dstY</span>
+            <span class="types"><span class="type">number</span></span>
+         the start coordinate to clear on the map (Y coordinate)
+        </li>
+        <li><span class="parameter">spX</span>
+            <span class="types"><span class="type">number</span></span>
+         the amount of tiles to draw to the tile map (X coordinate) (default 1)
+        </li>
+        <li><span class="parameter">spY</span>
+            <span class="types"><span class="type">number</span></span>
+         the amount of tiles to draw to the tile map (Y coordinate) (default 1)
+        </li>
+        <li><span class="parameter">a</span>
+            <span class="types"><span class="type">number</span></span>
+         the opacity of the thing to draw (default 0)
+        </li>
+        <li><span class="parameter">col</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         the colour effect (default is black {0, 0, 0})
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Breadboard\clearScreen"></a>
+    <strong>Breadboard\clearScreen (colours, red, green, blue, alpha)</strong>
+    </dt>
+    <dd>
+    Clear the screen.
+ It's advisable to always have this in the start of the <em>tick</em> function.
+ Whatever is given to this function is passed to <code>love.graphics.clear</code>.
+ So you can pass <strong><em>either</em> one table</strong> or up to <strong>four numbers</strong>.
+ The default is colour black.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">colours</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         a table containing the red, green, blue values
+  and an optional alpha on their respective positions
+        </li>
+        <li><span class="parameter">red</span>
+            <span class="types"><span class="type">number</span></span>
+         value for the red channel
+        </li>
+        <li><span class="parameter">green</span>
+            <span class="types"><span class="type">number</span></span>
+         value for the green channel
+        </li>
+        <li><span class="parameter">blue</span>
+            <span class="types"><span class="type">number</span></span>
+         value for the blue channel
+        </li>
+        <li><span class="parameter">alpha</span>
+            <span class="types"><span class="type">number</span></span>
+         value for the alpha channel
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Breadboard\makeTileset"></a>
+    <strong>Breadboard\makeTileset (fileName)</strong>
+    </dt>
+    <dd>
+    Make a tileset from a file.
+ Load a file pointed to by <code>fileName</code> and check whether it has already been loaded.
+ In case it has, return the existing tileset, otherwise create a tileset from the file,
+ cache it and return it.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">fileName</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         the given file name
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        tileset ID
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Breadboard\listTilesets"></a>
+    <strong>Breadboard\listTilesets ()</strong>
+    </dt>
+    <dd>
+    List all loaded tileset IDs.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        the table containing the list of all loaded/cached tileset IDs
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Breadboard\removeTileset"></a>
+    <strong>Breadboard\removeTileset (tilesetID)</strong>
+    </dt>
+    <dd>
+    Remove a tileset.
+ Given its ID remove a loaded tileset. On error, silently fail.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tilesetID</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         tileset ID
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Breadboard\button"></a>
+    <strong>Breadboard\button (btn)</strong>
+    </dt>
+    <dd>
+    Retrieve a button's state.
+ Given a button ID return whether it's pressed or not.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">btn</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         a button ID (l,u,r,d,a,b,c,s)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        the button state
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Breadboard\buttonPressed"></a>
+    <strong>Breadboard\buttonPressed (btn)</strong>
+    </dt>
+    <dd>
+    Retrieve whether a button has just been pressed.
+ Given a button ID return whether it's been pressed in the last frame.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">btn</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         a button ID (l,u,r,d,a,b,c,s)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        the button state
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Breadboard\printXY"></a>
+    <strong>Breadboard\printXY (x, y, text, col)</strong>
+    </dt>
+    <dd>
+    Print text on screen
+ Print some text on screen using the default font.  This is very basic and should only be used
+ for debugging reasons, or not at all.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">number</span></span>
+         the X coordinate of where to start writing
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">number</span></span>
+         the Y coordinate of where to start writing
+        </li>
+        <li><span class="parameter">text</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         the <strong>text</strong> to write
+        </li>
+        <li><span class="parameter">col</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         the colour to use (default white {1, 1, 1})
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Breadboard\tileDump"></a>
+    <strong>Breadboard\tileDump (fileName)</strong>
+    </dt>
+    <dd>
+    Write the tilemap to disk.
+ Given a file name write the current state of the tile map to disk. This is pretty heavy, so
+ it should be avoided for every frame. It's mainly for debugging reasons.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">fileName</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         the file name to write to. (PNG)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Breadboard\config"></a>
+    <strong>Breadboard\config (options)</strong>
+    </dt>
+    <dd>
+    Change configuration stuff.
+ Some changes may only be changed before the start of the engine, others can be change whilst
+ it is running.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">options</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+
+<p> the configuration table; the known confiuration entries are:</p>
+
+<ul>
+    <li>disableTouch - disable the gamepad that appears on android; Good for when you use
+    Löve2D's touch capabilities. (default false)</li>
+    <li>showMouse - by default the mouse is hidden, set this to true to leave
+    the mouse cursor visible</li>
+</ul>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Breadboard\viewport"></a>
+    <strong>Breadboard\viewport ()</strong>
+    </dt>
+    <dd>
+    Return some viewport information.
+ Return some <em>crucial?!</em> information about the viewport.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+
+<p> a table containing the following values:</p>
+
+<ul>
+    <li>offsetX and offsetY - Given that the viewport is dynamic this shows where exactly on
+    screen the first pixel of the internal viewport square</li>
+    <li>width and height - The viewport dimensions</li>
+    <li>zoom - The current scale/zoom level</li>
+</ul>
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Breadboard\animate"></a>
+    <strong>Breadboard\animate (delay, fnProgress, fnDone)</strong>
+    </dt>
+    <dd>
+    Start an animation coroutine.
+ Given a delay, a progress function and a done function, until the delay ends, execute the
+ progress function (passing it the elapsed percentage) and finally execute the done function.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">delay</span>
+            <span class="types"><span class="type">number</span></span>
+         the amount in milliseconds to execute this animation for.
+        </li>
+        <li><span class="parameter">fnProgress</span>
+            <span class="types"><span class="type">function</span></span>
+         the progress function
+        </li>
+        <li><span class="parameter">fnDone</span>
+            <span class="types"><span class="type">function</span></span>
+         the done function
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Breadboard\lerp"></a>
+    <strong>Breadboard\lerp (a, b, ratio)</strong>
+    </dt>
+    <dd>
+    Linear interpolation function.
+ Interpolate two numbers at a specific percentage.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">a</span>
+            <span class="types"><span class="type">number</span></span>
+         the first value
+        </li>
+        <li><span class="parameter">b</span>
+            <span class="types"><span class="type">number</span></span>
+         the second value
+        </li>
+        <li><span class="parameter">ratio</span>
+            <span class="types"><span class="type">number</span></span>
+         the ratio between the two as a value between 0 and 1
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Breadboard\screenSize"></a>
+    <strong>Breadboard\screenSize (v)</strong>
+    </dt>
+    <dd>
+    Set or Get the screen size.
+ If a value <code>v</code> is given, set the internal viewport size to <code>v</code> x <code>v</code>.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">v</span>
+            <span class="types"><span class="type">number</span></span>
+         if this is given, set the screen size
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+        the screen size if <code>v</code> is nto given
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2020-05-03 16:13:30 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

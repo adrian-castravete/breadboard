@@ -1,303 +1,278 @@
--- title:        Breadboard (fkge)
--- author:       Adrian Castravete (fkbm)
--- description:  Simple game engine over Löve2D for even faster prototyping
-
 local cpath = ...
 local lg = love.graphics
 local utils = require(cpath .. ".utils")
-local class = utils.class
 local Input = require(cpath .. ".input")
 local Cart = require(cpath .. ".cart")
-
-local input = Input()
-
 local _debug = false
-local Breadboard = class()
-
-local env = {
-  frame = function () end,
-  class = class,
-}
-
-function Breadboard:init()
-  self.state = "running"
-  self.screenSize = 240
-  self.width = 1280
-  self.height = 800
-  self.zoom = 2
-  self.offsetX = 0
-  self.offsetY = 0
-  self.runtime = {
-    screenSize = self.screenSize,
-    input = input,
-    drawBegin = function ()
-      self:drawBegin()
+local FrozenKnightGameEngine
+do
+  local _class_0
+  local _base_0 = {
+    start = function(self)
+      self.cart = Cart(self.runtime)
+      return utils.loveChain(self, {
+        'load',
+        'update',
+        'draw',
+        'resize'
+      })
     end,
-    drawEnd = function ()
-      self:drawEnd()
+    load = function(self)
+      if not self.env.showMouse then
+        love.mouse.setVisible(false)
+      end
+      lg.setDefaultFilter('nearest', 'nearest')
+      return self:onResize()
     end,
-    getViewportInfo = function ()
+    safeCall = function(self, ...)
+      local values = {
+        pcall(...)
+      }
+      local ok = values[1]
+      if ok then
+        table.remove(values, 1)
+        return unpack(values)
+      else
+        return self:setError(values[2])
+      end
+    end,
+    update = function(self, dt)
+      if self.state == 'running' then
+        self:safeCall(self.env.frame, dt)
+        return self:cycleAnimations(dt)
+      end
+    end,
+    draw = function(self)
+      lg.clear()
+      if self.state == 'fatalError' then
+        self:drawError()
+        return 
+      end
+      lg.setColor(1, 1, 1)
+      lg.draw(self.runtime.bgCvs)
+      if _debug and self.input then
+        return input:lovePrintButtons()
+      end
+    end,
+    drawBegin = function(self)
+      lg.push()
+      lg.translate(self.offsetX, self.offsetY)
+      return lg.scale(self.zoom, self.zoom)
+    end,
+    drawEnd = function(self)
+      return lg.pop()
+    end,
+    drawError = function(self)
+      lg.setFont(self._errorFont)
+      return lg.print(self.errorMessage, self._errorOffsetX, self._errorOffsetY)
+    end,
+    resize = function(self, w, h)
+      return self:onResize(w, h)
+    end,
+    onResize = function(self, w, h)
+      if not (w and h) then
+        w, h = lg.getDimensions()
+      end
+      if w ~= self.width or h ~= self.height then
+        self.runtime.bgCvs = lg.newCanvas(w, h)
+      end
+      self.width = w
+      self.height = h
+      self.zoom = math.floor(math.min(w, h) / self.screenSize)
+      local size = self.zoom * self.screenSize
+      if w > h then
+        self.offsetY = (h - size) * 0.5
+        self.offsetX = self.offsetY + (w - h) * 0.5
+      else
+        self.offsetX = (w - size) * 0.5
+        self.offsetY = self.offsetX
+      end
+    end,
+    setError = function(self, text)
+      local font = lg.newFont(self.height / 32)
+      local ew = font:getWidth(text)
+      local eh = font:getHeight()
+      local w, h = lg.getDimensions()
+      self._errorOffsetX = (w - ew) * 0.5
+      self._errorOffsetY = (h - eh) * 0.5
+      self._errorFont = font
+      self.state = 'fatalError'
+      self.errorMessage = text
+    end,
+    createAnimation = function(self, delay, fnProgress, fnDone)
+      local co = coroutine.create(function(delay)
+        local v = 0
+        while v < delay do
+          self:safeCall(fnProgress, v / delay)
+          v = v + coroutine.yield()
+        end
+        self:safeCall(fnProgress, 1)
+        if fnDone then
+          return self:safeCall(fnDone)
+        end
+      end)
+      coroutine.resume(co, delay / 1000)
+      return table.insert(self._animations, co)
+    end,
+    cycleAnimation = function(self, dt)
+      local anims = self._animations
+      local nanims = { }
+      for i = 1, #anims do
+        local co = anims[1]
+        if coroutine.resume(co, dt) then
+          table.insert(nanims, co)
+        end
+      end
+      self._animations = nanims
+    end
+  }
+  _base_0.__index = _base_0
+  _class_0 = setmetatable({
+    __init = function(self)
+      local ssize = 240
+      local input = Input()
+      self.env = {
+        frame = function()
+          return nil
+        end
+      }
+      self.state = 'running'
+      self.screenSize = ssize
+      self.width = 1280
+      self.height = 800
+      self.zoom = 2
+      self.offsetX = 0
+      self.offsetY = 0
+      self.cart = nil
+      self.runtime = {
+        ssize = ssize,
+        input = input,
+        drawBegin = self.drawBegin,
+        drawEnd = self.drawEnd,
+        getViewportInfo = function()
+          return {
+            originX = self.offsetX,
+            originY = self.offsetY,
+            width = self.width,
+            height = self.height,
+            zoom = self.zoom
+          }
+        end,
+        bgCvs = lg.newCanvas(self.width, self.height)
+      }
+      self._animations = { }
+    end,
+    __base = _base_0,
+    __name = "FrozenKnightGameEngine"
+  }, {
+    __index = _base_0,
+    __call = function(cls, ...)
+      local _self_0 = setmetatable({}, _base_0)
+      cls.__init(_self_0, ...)
+      return _self_0
+    end
+  })
+  _base_0.__class = _class_0
+  FrozenKnightGameEngine = _class_0
+end
+do
+  local _class_0
+  local _base_0 = {
+    draw = function(self, ...)
+      return self:_doCart('drawMap', ...)
+    end,
+    tile = function(self, ...)
+      return self:_doCart('tileDraw', ...)
+    end,
+    tileClear = function(self, ...)
+      return self:_doCart('tileClear', ...)
+    end,
+    clearScreen = function(self, ...)
+      return self:_doCart('clearScreen', ...)
+    end,
+    makeTileset = function(self, ...)
+      return self:_doCart('loadTileset', ...)
+    end,
+    listTilesets = function(self)
+      return self:_doCart('listTilesets')
+    end,
+    removeTileset = function(self, ...)
+      return self:_doCart('removeTileset', ...)
+    end,
+    button = function(self, ...)
+      return self:_doCart('button', ...)
+    end,
+    buttonPressed = function(self, ...)
+      return self:_doCart('buttonPressed', ...)
+    end,
+    printXY = function(self, ...)
+      return self:_doCart('print', ...)
+    end,
+    tileDump = function(self, ...)
+      return self:_doCart('tileDump', ...)
+    end,
+    config = function(self, options)
+      if not options or type(options) ~= 'table' then
+        return nil
+      end
+      if options.disableTouch and input then
+        input.disableTouch = true
+      end
+      if options.showMouse then
+        self.fkge.env.showMouse = true
+      end
+    end,
+    viewport = function(self)
       return {
-        originX = self.offsetX,
-        originY = self.offsetY,
-        width = self.width,
-        height = self.height,
-        zoom = self.zoom,
+        offsetX = self.fkge.offsetX,
+        offsetY = self.fkge.offsetY,
+        width = self.fkge.width,
+        height = self.fkge.height,
+        zoom = self.fkge.zoom
       }
     end,
-    bgCvs = lg.newCanvas(self.width, self.height),
-  }
-
-  self._animations = {}
-end
-
-function Breadboard:load()
-  if not env.showMouse then
-    love.mouse.setVisible(false)
-  end
-  lg.setDefaultFilter("nearest", "nearest")
-  self:onResize()
-end
-
-function Breadboard:safeCall(...)
-  local values = {pcall(...)}
-  local ok = values[1]
-  if ok then
-    table.remove(values, 1)
-    return unpack(values)
-  else
-    self:setError(values[2])
-  end
-end
-
-function Breadboard:update(dt)
-  if self.state == "running" then
-    self:safeCall(env.frame, dt)
-    self:cycleAnimations(dt)
-  end
-end
-
-function Breadboard:draw()
-  --lg.clear(2/7, 5/7, 1)
-  lg.clear()
-  if self.state == "fatalError" then
-    self:drawError()
-    return
-  end
-  lg.setColor(1, 1, 1)
-  lg.draw(self.runtime.bgCvs)
-  if _debug and input then
-    input.lovePrintButtons()
-  end
-end
-
-function Breadboard:drawBegin()
-  lg.push()
-  lg.translate(self.offsetX, self.offsetY)
-  lg.scale(self.zoom, self.zoom)
-end
-
-function Breadboard:drawEnd()
-  lg.pop()
-end
-
-function Breadboard:drawError()
-  lg.setFont(self._errorFont)
-  lg.print(self.errorMessage, self._errorOffsetX, self._errorOffsetY)
-end
-
-function Breadboard:resize(w, h)
-  self:onResize(w, h)
-end
-
-function Breadboard:onResize(w, h)
-  if not (w or h) then
-    w, h = lg.getDimensions()
-  end
-  if w ~= self.width or h ~= self.height then
-    self.runtime.bgCvs = lg.newCanvas(w, h)
-  end
-  self.width = w
-  self.height = h
-  self.zoom = math.floor(math.min(w, h) / self.screenSize)
-  local size = self.zoom * self.screenSize
-  if w > h then
-    self.offsetY = (h - size) / 2
-    self.offsetX = self.offsetY + (w - h) / 2
-  else
-    self.offsetX = (w - size) / 2
-    self.offsetY = self.offsetX
-  end
-end
-
-function Breadboard:setError(text)
-  local font = lg.newFont(self.height / 32)
-  local ew = font:getWidth(text)
-  local eh = font:getHeight()
-  local w, h = lg.getDimensions()
-
-  self._errorOffsetX = (w - ew) * 0.5
-  self._errorOffsetY = (h - eh) * 0.5
-  self._errorFont = font
-  self.state = "fatalError"
-  self.errorMessage = text
-end
-
-function Breadboard:createAnimation(delay, fnProgress, fnDone)
-  local co = coroutine.create(function (delay)
-    local v = 0
-    while v < delay do
-      self:safeCall(fnProgress, v / delay)
-      v = v + coroutine.yield()
-    end
-    self:safeCall(fnProgress, 1)
-    if fnDone then
-      self:safeCall(fnDone)
-    end
-  end)
-  coroutine.resume(co, delay / 1000)
-  table.insert(self._animations, co)
-end
-
-function Breadboard:cycleAnimations(dt)
-  local anims = self._animations
-  local nanims = {}
-  for i=1, #anims do
-    local co = anims[i]
-    if coroutine.resume(co, dt)  then
-      nanims[#nanims+1] = co
-    end
-  end
-  self._animations = nanims
-end
-
-main = Breadboard()
-utils.loveChain(main, {'load', 'update', 'draw', 'resize'})
-
-function prettyPrintString(data, indent)
-  function prettyIndent(indent)
-    local o = ""
-    for i=1, indent do
-      o = o .. "  "
-    end
-    return o
-  end
-
-  if not indent then
-    indent = 0
-  end
-
-  local o = ""
-  tdata = type(data)
-  if tdata == "table" then
-    o = o .. "{\n"
-    indent = indent + 1
-    for k, v in pairs(data) do
-      o = o .. prettyIndent(indent)
-      if type(k) ~= "string" then
-        k = "[" .. k .. "]"
+    animate = function(self, delay, fnProgress, fnDone)
+      return self.fkge:createAnimation(delay, fnProgress, fnDone)
+    end,
+    lerp = function(self, a, b, ratio)
+      return a + (b - a) * ratio
+    end,
+    screenSize = function(self, v)
+      if v then
+        self.fkge.screenSize = v
+        self.fkge.runtime.screenSize = v
+        return self.fkge:onResize()
+      else
+        return self.fkge.screenSize
       end
-      o = o .. k .. " = "
-      o = o .. prettyPrintString(v, indent)
+    end,
+    _doCart = function(self, method, ...)
+      local c = self.fkge.cart
+      if not c then
+        error("Game not started!", 3)
+      end
+      return c[method](c, ...)
     end
-    indent = indent - 1
-    o = o .. prettyIndent(indent)
-    if indent > 0 then
-      o = o .. "},\n"
-    else
-      o = o .. "}\n"
-    end
-  elseif tdata == "function" then
-    o = o .. "<function>,\n"
-  elseif tdata == "string" then
-    o = o .. '"' .. data .. '",\n'
-  elseif tdata == "number" or tdata == "boolean" then
-    o = o .. tostring(data) .. ",\n"
-  else
-    o = o .. "?" .. tdata .. "?,\n"
-  end
-
-  return o
-end
-
-function printAny(v)
-  print(prettyPrintString(v))
-  io.flush()
-end
-
-function lgPrintTable(tab)
-  local tabo = prettyPrintString(tab)
-  local i = 0
-  for line in tabo:gmatch("[^\n]+") do
-    local line = line:gsub("%s+$", "")
-    if line then
-      i = i + 1
-      lg.print(line, 0, i*16)
-    end
-  end
-end
-
-local cart = Cart(main.runtime)
-
-function _attachMethodsToTable(conf, tblIn, tblOut)
-  local o = tblOut or {}
-
-  for key, value in pairs(conf) do
-    o[key] = function(...)
-      return tblIn[value](tblIn, ...)
-    end
-  end
-
-  return o
-end
-
-function env.config(options)
-  if not options or type(options) ~= 'table' then
-    return
-  end
-  if options.disableTouch and input then
-    input.disableTouch = true
-  end
-  if options.showMouse then
-    env.showMouse = true
-  end
-end
-
-function env.viewport()
-  return {
-    offsetX = main.offsetX,
-    offsetY = main.offsetY,
-    width = main.width,
-    height = main.height,
-    zoom = main.zoom,
   }
+  _base_0.__index = _base_0
+  _class_0 = setmetatable({
+    __init = function(self, dontStart)
+      self.fkge = FrozenKnightGameEngine()
+      if not dontStart then
+        self.fkge.start()
+      end
+      return self
+    end,
+    __base = _base_0,
+    __name = "Breadboard"
+  }, {
+    __index = _base_0,
+    __call = function(cls, ...)
+      local _self_0 = setmetatable({}, _base_0)
+      cls.__init(_self_0, ...)
+      return _self_0
+    end
+  })
+  _base_0.__class = _class_0
+  Breadboard = _class_0
 end
-
-function env.animate(delay, fnProgress, fnDone)
-  main:createAnimation(delay, fnProgress, fnDone)
-end
-
-function env.lerp(a, b, r)
-  return a + (b - a) * r
-end
-
-function env.screenSize(v)
-  main.screenSize = v
-  main.runtime.screenSize = v
-  main:onResize()
-end
-
-return _attachMethodsToTable({
-  clearScreen = "clearScreen",      -- clear the screen
-  draw = "drawMap",                 -- draw from tilemap to screen
-  tile = "tileDraw",                -- draw to the tilemap
-  tileClear = "tileClear",          -- clear on the tilemap
-  makeTileset = "loadTileset",      -- load a tileset from file
-  listTilesets = "listTilesets",    -- list tilesets
-  removeTileset = "removeTileset",  -- remove a loaded tileset
-  button = "button",                -- check button press
-  buttonPressed = "buttonPressed",  -- check button press in “this” frame
-  -- debug
-  printXY = "print",                -- print text on screen
-  tileDump = "tileDump",            -- exports an image with the current tilemap
-}, cart, env)
