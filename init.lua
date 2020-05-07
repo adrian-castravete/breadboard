@@ -1,8 +1,9 @@
 local cpath = ...
 local lg = love.graphics
-local utils = require(cpath .. ".utils")
-local Input = require(cpath .. ".input")
-local Cart = require(cpath .. ".cart")
+local utils = require(tostring(cpath) .. ".utils")
+local log = require(tostring(cpath) .. ".log")
+local Input = require(tostring(cpath) .. ".input")
+local Cart = require(tostring(cpath) .. ".cart")
 local _debug = false
 local FrozenKnightGameEngine
 do
@@ -18,7 +19,7 @@ do
       })
     end,
     load = function(self)
-      if not self.env.showMouse then
+      if not self.showMouse then
         love.mouse.setVisible(false)
       end
       lg.setDefaultFilter('nearest', 'nearest')
@@ -37,8 +38,10 @@ do
       end
     end,
     update = function(self, dt)
-      if self.state == 'running' then
-        self:safeCall(self.env.frame, dt)
+      if self.state == 'running' and self.frame then
+        self:safeCall(function(dt)
+          return self:frame(dt)
+        end)
         return self:cycleAnimations(dt)
       end
     end,
@@ -114,7 +117,7 @@ do
       coroutine.resume(co, delay / 1000)
       return table.insert(self._animations, co)
     end,
-    cycleAnimation = function(self, dt)
+    cycleAnimations = function(self, dt)
       local anims = self._animations
       local nanims = { }
       for i = 1, #anims do
@@ -131,11 +134,7 @@ do
     __init = function(self)
       local ssize = 240
       local input = Input()
-      self.env = {
-        frame = function()
-          return nil
-        end
-      }
+      self.frame = nil
       self.state = 'running'
       self.screenSize = ssize
       self.width = 1280
@@ -219,7 +218,7 @@ do
         input.disableTouch = true
       end
       if options.showMouse then
-        self.fkge.env.showMouse = true
+        self.fkge.showMouse = true
       end
     end,
     viewport = function(self)
@@ -258,8 +257,13 @@ do
   _class_0 = setmetatable({
     __init = function(self, dontStart)
       self.fkge = FrozenKnightGameEngine()
+      self.fkge.frame = function(dt)
+        if self.frame then
+          return self:frame(dt)
+        end
+      end
       if not dontStart then
-        self.fkge.start()
+        self.fkge:start()
       end
       return self
     end,
@@ -275,4 +279,5 @@ do
   })
   _base_0.__class = _class_0
   Breadboard = _class_0
+  return _class_0
 end

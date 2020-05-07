@@ -181,7 +181,7 @@ end
 do
   local _class_0
   local _base_0 = {
-    love = function(self)
+    load = function(self)
       self.img = lg.newImage(tostring(cpath) .. "/assets/buttons.png")
       self.widgets = {
         DpadWidget({
@@ -674,4 +674,5 @@ do
   })
   _base_0.__class = _class_0
   Input = _class_0
+  return _class_0
 end

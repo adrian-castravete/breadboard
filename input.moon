@@ -105,7 +105,8 @@ class DpadWidget extends Widget
 		o
 
 
-export class Input
+export ^
+class Input
 
 	new: =>
 		@disableTouch = false
@@ -152,7 +153,7 @@ export class Input
 
 		@resize!
 
-	love: =>
+	load: =>
 		@img = lg.newImage "#{cpath}/assets/buttons.png"
 		@widgets = {
 			DpadWidget {

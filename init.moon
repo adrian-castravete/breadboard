@@ -8,9 +8,10 @@
 
 cpath = ...
 lg = love.graphics
-utils = require cpath .. ".utils"
-Input = require cpath .. ".input"
-Cart = require cpath .. ".cart"
+utils = require "#{cpath}.utils"
+log = require "#{cpath}.log"
+Input = require "#{cpath}.input"
+Cart = require "#{cpath}.cart"
 
 _debug = false
 
@@ -21,8 +22,7 @@ class FrozenKnightGameEngine
 		ssize = 240
 		input = Input!
 
-		@env =
-			frame: -> nil
+		@frame = nil
 		@state = 'running'
 		@screenSize = ssize
 		@width = 1280
@@ -53,7 +53,7 @@ class FrozenKnightGameEngine
 		utils.loveChain self, {'load', 'update', 'draw', 'resize'}
 
 	load: =>
-		if not @env.showMouse
+		if not @showMouse
 			love.mouse.setVisible false
 		lg.setDefaultFilter 'nearest', 'nearest'
 		@onResize!
@@ -68,12 +68,13 @@ class FrozenKnightGameEngine
 			@setError values[2]
 
 	update: (dt)=>
-		if @state == 'running'
-			@safeCall @env.frame, dt
+		if @state == 'running' and @frame
+			@safeCall (dt)->
+				@frame dt
 			@cycleAnimations dt
 
 	draw: =>
-		-- lg.clear 2/7, 5/7, 1
+		--lg.clear 2/7, 5/7, 1
 		lg.clear!
 		if @state == 'fatalError'
 			@drawError!
@@ -143,7 +144,7 @@ class FrozenKnightGameEngine
 		coroutine.resume co, delay / 1000
 		table.insert @_animations, co
 
-	cycleAnimation: (dt)=>
+	cycleAnimations: (dt)=>
 		anims = @_animations
 
 		nanims = {}
@@ -155,15 +156,19 @@ class FrozenKnightGameEngine
 		@_animations = nanims
 
 
-export class Breadboard
+export ^
+class Breadboard
 
 	--- Constructor.
 	-- Create the main Breadboard object, a simple engine on top of Löve2D
 	-- @tparam boolean dontStart whether to create the _cart_ and start running
 	new: (dontStart)=>
 		@fkge = FrozenKnightGameEngine!
+		@fkge.frame = (dt)->
+			if @frame
+				@frame dt
 		if not dontStart
-			@fkge.start!
+			@fkge\start!
 		self
 
 	--- Draw (part of) the map to screen.
@@ -200,7 +205,7 @@ export class Breadboard
 	tile: (...)=>
 		@_doCart 'tileDraw', ...
 
-	--- Clear one or more tiles from the tile map
+	--- Clear one or more tiles from the tile map.
 	-- @tparam number dstX the start coordinate to clear on the map (X coordinate)
 	-- @tparam number dstY the start coordinate to clear on the map (Y coordinate)
 	-- @tparam number spX the amount of tiles to draw to the tile map (X coordinate) (default 1)
@@ -258,7 +263,7 @@ export class Breadboard
 	buttonPressed: (...)=>
 		@_doCart 'buttonPressed', ...
 
-	--- Print text on screen
+	--- Print text on screen.
 	-- Print some text on screen using the default font. This is very basic and should only be used
 	-- for debugging reasons, or not at all.
 	-- @tparam number x the X coordinate of where to start writing
@@ -292,7 +297,7 @@ export class Breadboard
 			input.disableTouch = true
 
 		if options.showMouse
-			@fkge.env.showMouse = true
+			@fkge.showMouse = true
 
 	--- Return some viewport information.
 	-- Return some _crucial?!_ information about the viewport.
