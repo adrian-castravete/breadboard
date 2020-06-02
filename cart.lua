@@ -161,9 +161,14 @@ end
 function Cart:clearScreen(...)
   lg.setCanvas(self._runtime.bgCvs)
   self._runtime.drawBegin()
-  lg.clear(...)
+  local values = {pcall(lg.clear, ...)}
   self._runtime.drawEnd()
   lg.setCanvas()
+
+  local ok = values[1]
+  if not ok then
+    error(values[2], 2)
+  end
 end
 
 function Cart:drawMap(sourceCellX, sourceCellY, spanCellX, spanCellY, offsetX, offsetY, rotationAngle, scale, alpha, colour)
