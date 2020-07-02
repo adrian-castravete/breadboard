@@ -1,4 +1,4 @@
-function chain(loveFunc, func, after)
+local function chain(loveFunc, func, after)
   return function (...)
     if loveFunc and after then
       loveFunc(...)
@@ -10,7 +10,7 @@ function chain(loveFunc, func, after)
   end
 end
 
-function loveChain(instance, funcNames)
+local function loveChain(instance, funcNames)
   for i=1, #funcNames do
     local key = funcNames[i]
     love[key] = chain(love[key], function (...)
@@ -19,7 +19,7 @@ function loveChain(instance, funcNames)
   end
 end
 
-function class(base)
+local function class(base)
   local Klass = {}
   Klass.__index = Klass
   setmetatable(Klass, {

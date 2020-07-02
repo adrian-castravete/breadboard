@@ -4,7 +4,7 @@ local cache = {
   images = {}
 }
 
-function loadImage(fileName)
+local function loadImage(fileName)
   local imgs = cache.images
   local img = imgs[fileName]
   if not img then

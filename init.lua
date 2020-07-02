@@ -174,7 +174,7 @@ end
 main = Breadboard()
 utils.loveChain(main, {'load', 'update', 'draw', 'resize'})
 
-function prettyPrintString(data, indent)
+local function prettyPrintString(data, indent)
   function prettyIndent(indent)
     local o = ""
     for i=1, indent do
@@ -220,12 +220,12 @@ function prettyPrintString(data, indent)
   return o
 end
 
-function printAny(v)
+local function printAny(v)
   print(prettyPrintString(v))
   io.flush()
 end
 
-function lgPrintTable(tab)
+local function lgPrintTable(tab)
   local tabo = prettyPrintString(tab)
   local i = 0
   for line in tabo:gmatch("[^\n]+") do
@@ -239,7 +239,7 @@ end
 
 local cart = Cart(main.runtime)
 
-function _attachMethodsToTable(conf, tblIn, tblOut)
+local function _attachMethodsToTable(conf, tblIn, tblOut)
   local o = tblOut or {}
 
   for key, value in pairs(conf) do
